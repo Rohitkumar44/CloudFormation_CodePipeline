@@ -6,12 +6,36 @@ Parameters:
     Type: String
     Default: 10.0.0.0/16
     Description: CIDR block for the VPC
+  PublicSubnetCidr1:
+    Type: String
+    Default: 10.4.1.0/24
+    Description: CIDR block for the first public subnet
+  PublicSubnetCidr2:
+    Type: String
+    Default: 10.4.2.0/24
+    Description: CIDR block for the second public subnet
+  PrivateSubnetCidr1:
+    Type: String
+    Default: 10.4.3.0/24
+    Description: CIDR block for the first private subnet
+  PrivateSubnetCidr2:
+    Type: String
+    Default: 10.4.4.0/24
+    Description: CIDR block for the second private subnet
+  SSHLocation:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: IP range allowed to SSH into instances
+    AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$'
+    ConstraintDescription: Must be a valid IP CIDR range in the form of x.x.x.x/x.
 
 Resources:
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: !Ref VPCCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
       Tags:
         - Key: Name
           Value: !Sub "Stack-VPC-${AWS::Region}"
@@ -20,7 +44,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: !Ref PublicSubnetCidr1
       AvailabilityZone: !Select [0, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -31,7 +55,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.0.2.0/24
+      CidrBlock: !Ref PublicSubnetCidr2
       AvailabilityZone: !Select [1, !GetAZs '']
       MapPublicIpOnLaunch: true
       Tags:
@@ -42,7 +66,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.0.3.0/24
+      CidrBlock: !Ref PrivateSubnetCidr1
       AvailabilityZone: !Select [0, !GetAZs '']
       MapPublicIpOnLaunch: false
       Tags:
@@ -53,7 +77,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.0.4.0/24
+      CidrBlock: !Ref PrivateSubnetCidr2
       AvailabilityZone: !Select [1, !GetAZs '']
       MapPublicIpOnLaunch: false
       Tags:
@@ -67,12 +91,12 @@ Resources:
       VpcId: !Ref MyVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: !Ref SSHLocation
         - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
+          FromPort: '80'
+          ToPort: '80'
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
