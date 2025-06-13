@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: StackSet template to create a basic VPC with public and private subnets and a security group
+Description: StackSet template to create a basic VPC with public and private subnets and a security group and doing
 
 Parameters:
   VPCCidr:
