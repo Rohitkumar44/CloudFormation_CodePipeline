@@ -9,22 +9,22 @@ Parameters:
 
   PublicSubnetCidr1:
     Type: String
-    Default: 10.4.1.0/24
+    Default: 10.4.1.0/22
     Description: CIDR block for the first public subnet
 
   PublicSubnetCidr2:
     Type: String
-    Default: 10.4.2.0/24
+    Default: 10.4.2.0/22
     Description: CIDR block for the second public subnet
 
   PrivateSubnetCidr1:
     Type: String
-    Default: 10.4.3.0/24
+    Default: 10.4.3.0/22
     Description: CIDR block for the first private subnet
 
   PrivateSubnetCidr2:
     Type: String
-    Default: 10.4.4.0/24
+    Default: 10.4.4.0/22
     Description: CIDR block for the second private subnet
 
 Resources:
